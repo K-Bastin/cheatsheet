@@ -682,7 +682,7 @@ export const CatFactComponentListItem = ({
  - **Sélection multiple de curseurs** + : `Ctrl + D`
  - **Ouvrir le panneau de commande** : `Ctrl + Shift + P`
  - **Supprimer la ligne** : `Ctrl + Shift + K`
- - 
+
 ### Bibliothèque 
 
   - i18n
