@@ -676,7 +676,7 @@ export const CatFactComponentListItem = ({
  - **Aller à la définition** : `F12`
  - **Afficher des suggestions de code** : `Ctrl + espace`
  - **Indentation automatique** : `Ctrl + Shift + I`
- - **Déplacer la ligne vers la bas/haut : `Alt +  ↓ / ↑`
+ - **Déplacer la ligne vers la bas/haut** : `Alt +  ↓ / ↑`
  - **Copier la ligne vers le bas/haut** : `Alt + Shift + ↓ / ↑`
  - **Changer le nom de la variable partout dans le fichier** : `F2`
  - **Sélection multiple de curseurs** + : `Ctrl + D`
