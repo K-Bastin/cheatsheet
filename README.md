@@ -421,6 +421,9 @@ export const AxiosComponent = () => {
   const fetchCatFact = async () => {
     setErrorFetch("");
     setIsLoading(true);
+    setDataCatFact({
+      text: "",
+    });
     try {
       const response = await axios.get(endpoint + "/facts/random");
       setDataCatFact(response.data); // Mettre à jour l'état avec la donnée reçue
@@ -453,6 +456,192 @@ export const AxiosComponent = () => {
 };
 ```
 ### Redux
+
+Example de code: Application affichant des "Cat fact" qui viennent d'une API.
+Création du store dans l'application. Avec redux, celui-ci doit être unique et ne sera fait qu'une seule fois. il sera cependant modifié pour rajouter les nouveaux reducer.
+```
+//Fichier store.ts
+import { configureStore } from "@reduxjs/toolkit";
+import catFactReducer from "./catFact/catFact.reducer";
+
+const store = configureStore({
+  reducer: {
+    catFact: catFactReducer,
+  },
+  devTools: import.meta.env.DEV,
+});
+
+// - Le type du store Redux
+export type Store = typeof store;
+// - Le type du "state" du store (via la méthode "getState")
+export type StateStore = ReturnType<Store["getState"]>;
+// - Le type des actions possible du store (via le dispatcher)
+export type DispatchStore = Store["dispatch"];
+
+export default store;
+```
+Création des actions et du reducer
+```
+//Fichier catFact.action.ts
+import { createAsyncThunk } from "@reduxjs/toolkit";
+import { requestNewCatFact } from "../../services/catFact.service";
+
+type CatFactData = {
+  text: string;
+};
+
+export const getCatFact = createAsyncThunk("catFact/getCatFact", async () => {
+  // Requete ajax
+  const data: CatFactData = await requestNewCatFact();
+
+  // En cas de succes -> Envoi des données
+  return data;
+});
+```
+```
+//Fichier catFact.reducer.ts
+import { createReducer } from "@reduxjs/toolkit";
+import { getCatFact } from "./catFact.action";
+
+export type CatFact = {
+  text: string;
+};
+export type catFactReducerState = {
+  catFacts: CatFact[];
+  isLoading: boolean;
+  error: string | null;
+};
+
+const initialState: catFactReducerState = {
+  catFacts: [],
+  isLoading: false,
+  error: null,
+};
+
+const catFactReducer = createReducer(initialState, (builder) => {
+  builder
+    .addCase(getCatFact.pending, (state) => {
+      state.isLoading = true;
+      state.error = null;
+    })
+    .addCase(getCatFact.fulfilled, (state, action) => {
+      const catFact = action.payload;
+      state.isLoading = false;
+      state.catFacts.push(catFact);
+    })
+    .addCase(getCatFact.rejected, (state, action) => {
+      state.isLoading = false;
+      state.error = action.error.message ?? "Erreur inconnue";
+    });
+});
+
+export default catFactReducer;
+```
+Création du service permettant de récupérer via Axios les données d'une API (ici un simple GET afin de récupérer un "cat fact")
+```
+//Fichier catFact.services.ts
+import axios from "axios";
+
+export const requestNewCatFact = async () => {
+  const endpoint: string = "https://cat-fact.herokuapp.com";
+
+  const { data } = await axios.get(endpoint + "/facts/random");
+
+  return {
+    text: data.text,
+  };
+};
+```
+Englober l'application dans le store afin quce celui-ci soit disponible partout.
+```
+//Fichier main.tsx
+import { StrictMode } from "react";
+import { createRoot } from "react-dom/client";
+import { Provider } from "react-redux";
+import App from "./App.tsx";
+import "./index.css";
+import store from "./store/store.ts";
+
+createRoot(document.getElementById("root")!).render(
+  <StrictMode>
+    <Provider store={store}>
+      <App />
+    </Provider>
+  </StrictMode>
+);
+```
+Utilisation de redux dans un composant afin de récupérer et d'affichers des catfacts.
+Dans cet exemple, division en 3 composants : 
+ - CatFactComponent: composant principale qui fait appel au dispatch et au store. C'est ce composants qui contient la listes des catFact ainsi que le button qui fait les appels à l'API pour récupérer des catfacts.
+ - CatFactComponentList : Composant qui affiches CatFactComponentItem. Son parent lui a passer la liste des Catfacts. Il les passera ensuite un part un à son enfant CatFactComponentListItem.
+ - CatFactComponentListItem : Composant qui se charge uniquement d'afficher le catFact. Son parent CatFactComponentList lui à uniquement passer le Catfact qu'il doit afficher
+```
+//Fichier CatFactComponent.tsx
+import { useDispatch, useSelector } from "react-redux";
+import { getCatFact } from "../../store/catFact/catFact.action";
+import { DispatchStore, StateStore } from "../../store/store";
+import { CatFactComponentList } from "./CatFactComponentList";
+
+export const CatFactComponent = () => {
+  const dispatch: DispatchStore = useDispatch();
+
+  const catFacts = useSelector((state: StateStore) => state.catFact.catFacts);
+
+  const handleGetNewCatFact = () => {
+    dispatch(getCatFact());
+  };
+
+  return (
+    <section>
+      <div>
+        <button onClick={handleGetNewCatFact}>
+          Recupérer un nouveau catFact
+        </button>
+      </div>
+      <div>
+        <CatFactComponentList catFacts={catFacts}></CatFactComponentList>
+      </div>
+    </section>
+  );
+};
+```
+```
+//Fichier CatFactComponentList
+import { CatFact } from "../../store/catFact/catFact.reducer";
+import { CatFactComponentListItem } from "./CatFactComponentListItem";
+
+export type CatFactComponentListProps = {
+  catFacts: CatFact[];
+};
+
+export const CatFactComponentList = ({
+  catFacts,
+}: CatFactComponentListProps) => {
+  return (
+    <section>
+      {catFacts.map((catFact) => (
+        <CatFactComponentListItem {...catFact} />
+      ))}
+    </section>
+  );
+};
+```
+```
+//Fichier CatFactComponentListItem
+import { CatFact } from "../../store/catFact/catFact.reducer";
+
+export type CatFactComponentListItemProps = CatFact & {};
+
+export const CatFactComponentListItem = ({
+  text,
+}: CatFactComponentListItemProps) => {
+  return (
+    <article>
+      <p>CatFact : {text}</p>
+    </article>
+  );
+};
+```
 
 ### Extension VSCode 
 ### Raccourcis VSCode
