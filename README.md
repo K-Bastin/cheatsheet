@@ -54,7 +54,7 @@ Le useEffect est du code qui sera éxécuté soit, au premier rendu du composant
 
 Dans ce cas-ci, l'affichage dans la console sera effectué uniquement au premier rendu du composant.
 
-```
+```typescript
   useEffect(() => {
     console.log("Effectué une seule fois");
     return () => {};
@@ -63,7 +63,7 @@ Dans ce cas-ci, l'affichage dans la console sera effectué uniquement au premier
 
 Dans ce cas-ci, l'affichage dans la console sera effectué à chaque rendu du composant.
 
-```
+```typescript
   useEffect(() => {
     console.log("Effectué à chaque rendu");
     return () => {};
@@ -73,7 +73,8 @@ Dans ce cas-ci, l'affichage dans la console sera effectué à chaque rendu du co
 Dans ce cas-ci, l'affichage dans la console sera effectué à chaque modification de la variable "Value".
 
 Attention au boucle infinie si du code dans ce useEffect met à jour la variable impliquée.
-```
+
+```typescript
   useEffect(() => {
     console.log("Effectué à chaque changement de la variable");
     return () => {};
@@ -85,14 +86,15 @@ Attention au boucle infinie si du code dans ce useEffect met à jour la variable
 Le useState est un hook utilisé pour ajouter un état local aux composants.
 Il retourne une paire [valeur, fonctionDeMiseAJour]  
 
-```
+```typescript
   const [value, setValue] = useState<number>(0);
 ```
 
 Il est important de noté que la fonction de mise à jour (setState) ne remplace par l'état immédiatement et que c'est une opération asynchrone. L'appel à au setState, planifie une mise à jour du composant et la valeur ne sera mise à jour qu'au rendu de celui ci.
 
 Exemple ce code affichera 1 et non 2 car la valeur n'as pas encore été mise à jour.
-```
+
+```typescript
       const [value, setValue] = useState<number>(0);
 
       setValue((prevValue) => prevValue + 1);
@@ -103,7 +105,8 @@ Exemple ce code affichera 1 et non 2 car la valeur n'as pas encore été mise à
 
 Ce hook permet de créer une référence mutable qui peut persister entre les rendu sans déclencher de render lorsqu'elle est modifiée. 
 Elle est utile pour accéder à des élements du DOM directement.
-```
+
+```typescript
 function TextInputWithFocusButton() {
   const inputRef = useRef(null);
 
@@ -122,7 +125,8 @@ function TextInputWithFocusButton() {
 ```
 
 Ou pour stocker des valeurs persistance.
-```
+
+```typescript
 function Counter() {
   const [count, setCount] = useState(0);
   const renderCount = useRef(1);
@@ -143,7 +147,8 @@ function Counter() {
 
 ### useId
 Ce hook permet de générer des identifiants unique qui peuvent être utilisé dans les composants, particulièrement utile pour créer les attributs id qui sont unique dans le DOM.
-```
+
+```typescript
 function MyForm() {
   const id = useId();
 
@@ -158,7 +163,7 @@ function MyForm() {
 
 ### Le Typage
 
-```
+```typescript
 type User = {
   id?: number;
   name: string;
@@ -176,7 +181,7 @@ Le "?" dans le typage signifique c'est une valeur qui n'est pas obligatoire.
 
 ### Les Enumération
 
-```
+```typescript
 export enum Nat {
   BE = "BE",
   FR = "FR",
@@ -197,7 +202,7 @@ Dans le cas du statut, cette syntaxe signifique que Closed vaudra 2 et que ReOpe
 
 #### Passage par object
 
-```
+```typescript
 import { ComposantEnfant } from "../ComposantEnfant/ComposantEnfant";
 
 export const ComposantParent = () => {
@@ -208,7 +213,7 @@ export const ComposantParent = () => {
   return <ComposantEnfant adress={adressUser}></ComposantEnfant>;
 };
 ```
-```
+```typescript
 type ComposantEnfantProps = {
   adress: {
     street: string;
@@ -229,7 +234,7 @@ export const ComposantEnfant = ({ adress }: ComposantEnfantProps) => {
 ```
 #### Passage direct
 
-```
+```typescript
 import { ComposantEnfant } from "../ComposantEnfant/ComposantEnfant";
 
 export const ComposantParent = () => {
@@ -241,7 +246,7 @@ export const ComposantParent = () => {
 };
 ```
 
-```
+```typescript
 type ComposantEnfantProps = {
   name: string;
   email: string;
@@ -265,7 +270,8 @@ export const ComposantEnfant = (user: ComposantEnfantProps) => {
 ### Formulaire avec React-Hook-Form
 
 Exemple d'un formulaire basique de login.
-```
+
+```typescript
 import { useForm } from "react-hook-form";
 
 type LoginProps = {
@@ -322,7 +328,8 @@ export const FormComponent = () => {
 
 Afin de valider les données d'un formulaire, il est possible de passer par une bibliothèque comme Yup. Celle-ci permet d'établir un schéma avec les définitions des obligations des champs du formulaire.
 Exemple de code
-```
+
+```typescript
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import * as Yup from "yup";
@@ -389,7 +396,8 @@ export const FormComponent = () => {
 ### Requête HTTP avec Axios
 
 Exemple de code pour un get avec Axios.
-```
+
+```typescript
 import axios from "axios";
 import { useEffect, useState } from "react";
 
@@ -458,11 +466,13 @@ export const AxiosComponent = () => {
   );
 };
 ```
+
 ### Redux
 
 Example de code: Application affichant des "Cat fact" qui viennent d'une API.
 Création du store dans l'application. Avec redux, celui-ci doit être unique et ne sera fait qu'une seule fois. il sera cependant modifié pour rajouter les nouveaux reducer.
-```
+
+```typescript
 //Fichier store.ts
 import { configureStore } from "@reduxjs/toolkit";
 import catFactReducer from "./catFact/catFact.reducer";
@@ -483,8 +493,10 @@ export type DispatchStore = Store["dispatch"];
 
 export default store;
 ```
+
 Création des actions et du reducer
-```
+
+```typescript
 //Fichier catFact.action.ts
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { requestNewCatFact } from "../../services/catFact.service";
@@ -539,9 +551,12 @@ const catFactReducer = createReducer(initialState, (builder) => {
 });
 
 export default catFactReducer;
+
 ```
+
 Création du service permettant de récupérer via Axios les données d'une API (ici un simple GET afin de récupérer un "cat fact")
-```
+
+```typescript
 //Fichier catFact.services.ts
 import axios from "axios";
 
@@ -555,8 +570,10 @@ export const requestNewCatFact = async () => {
   };
 };
 ```
+
 Englober l'application dans le store afin quce celui-ci soit disponible partout.
-```
+
+```typescript
 //Fichier main.tsx
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
@@ -573,12 +590,14 @@ createRoot(document.getElementById("root")!).render(
   </StrictMode>
 );
 ```
+
 Utilisation de redux dans un composant afin de récupérer et d'affichers des catfacts.
 Dans cet exemple, division en 3 composants : 
  - CatFactComponent: composant principale qui fait appel au dispatch et au store. C'est ce composants qui contient la listes des catFact ainsi que le button qui fait les appels à l'API pour récupérer des catfacts.
  - CatFactComponentList : Composant qui affiches CatFactComponentItem. Son parent lui a passer la liste des Catfacts. Il les passera ensuite un part un à son enfant CatFactComponentListItem.
  - CatFactComponentListItem : Composant qui se charge uniquement d'afficher le catFact. Son parent CatFactComponentList lui à uniquement passer le Catfact qu'il doit afficher
-```
+   
+```typescript
 //Fichier CatFactComponent.tsx
 import { useDispatch, useSelector } from "react-redux";
 import { getCatFact } from "../../store/catFact/catFact.action";
@@ -608,7 +627,8 @@ export const CatFactComponent = () => {
   );
 };
 ```
-```
+
+```typescript
 //Fichier CatFactComponentList
 import { CatFact } from "../../store/catFact/catFact.reducer";
 import { CatFactComponentListItem } from "./CatFactComponentListItem";
@@ -629,7 +649,8 @@ export const CatFactComponentList = ({
   );
 };
 ```
-```
+
+```typescript
 //Fichier CatFactComponentListItem
 import { CatFact } from "../../store/catFact/catFact.reducer";
 
