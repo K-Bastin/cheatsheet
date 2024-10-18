@@ -260,8 +260,198 @@ export const ComposantEnfant = (user: ComposantEnfantProps) => {
 ```
 
 ### Formulaire avec React-Hook-Form
-### Validation avec Yup
-### Requête HTTP
+
+Exemple d'un formulaire basique de login.
+```
+import { useForm } from "react-hook-form";
+
+type LoginProps = {
+  email: string;
+  password: string;
+};
+
+export const FormComponent = () => {
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<LoginProps>({
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+  });
+
+  const onSubmitLogin = (data: LoginProps) => {
+    // les données du formulaires se trouvent dans data
+    console.log(data.email);
+    reset();
+  };
+
+  return (
+    <>
+      <form onSubmit={handleSubmit(onSubmitLogin)}>
+        <div>
+          <label>Email : </label>
+          <input type="text" {...register("email", { required: true })} />
+          {errors.email && <p>Veuillez indiquez une adresse email.</p>}
+        </div>
+        <div>
+          <label>Password : </label>
+          <input
+            type="password"
+            {...register("password", { min: 1, required: true })}
+          />
+          {errors.email && <p>Veuillez indiquez un mot de passe.</p>}
+        </div>
+
+        <div>
+          <button type="submit">Login</button>
+        </div>
+      </form>
+    </>
+  );
+};
+```
+
+### Validation d'un formulaire React-Hook-Form avec Yup
+
+Afin de valider les données d'un formulaire, il est possible de passer par une bibliothèque comme Yup. Celle-ci permet d'établir un schéma avec les définitions des obligations des champs du formulaire.
+Exemple de code
+```
+import { yupResolver } from "@hookform/resolvers/yup";
+import { useForm } from "react-hook-form";
+import * as Yup from "yup";
+
+type LoginProps = {
+  email: string;
+  password: string;
+};
+
+//Définition du schéma de validation
+const validationSchema = Yup.object().shape({
+  email: Yup.string()
+    .email("L'adresse email n'est pas valide")
+    .required("L'adresse email est requise."),
+  password: Yup.string().required("Le mot de passe."),
+});
+
+export const FormComponent = () => {
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<LoginProps>({
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+    resolver: yupResolver(validationSchema),
+  });
+
+  const onSubmitLogin = (data: LoginProps) => {
+    // les données du formulaires se trouvent dans data
+    console.log(data.email);
+    reset();
+  };
+
+  return (
+    <>
+      <form onSubmit={handleSubmit(onSubmitLogin)}>
+        <div>
+          <label>Email : </label>
+          <input type="text" {...register("email", { required: true })} />
+          {errors.email && <p>{errors.email.message}</p>}
+        </div>
+        <div>
+          <label>Password : </label>
+          <input
+            type="password"
+            {...register("password", { min: 1, required: true })}
+          />
+          {errors.email && <p>Veuillez indiquez un mot de passe.</p>}
+        </div>
+
+        <div>
+          <button type="submit">Login</button>
+        </div>
+      </form>
+    </>
+  );
+};
+
+```
+### Requête HTTP avec Axios
+
+Exemple de code pour un get avec Axios.
+```
+import axios from "axios";
+import { useEffect, useState } from "react";
+
+type catFactFromEndpoint = {
+  status: Status;
+  _id: string;
+  user: string;
+  text: string;
+  __v: number;
+  source: string;
+  updatedAt: string;
+  type: string;
+  createdAt: string;
+  deleted: boolean;
+  used: boolean;
+};
+
+type Status = {
+  verified: boolean;
+  sentCount: number;
+};
+
+type catFact = Pick<catFactFromEndpoint, "text">;
+
+export const AxiosComponent = () => {
+  const endpoint: string = "https://cat-fact.herokuapp.com";
+
+  const [dataCatFact, setDataCatFact] = useState<catFact>();
+  const [errorFetch, setErrorFetch] = useState<string>("");
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  const fetchCatFact = async () => {
+    setErrorFetch("");
+    setIsLoading(true);
+    try {
+      const response = await axios.get(endpoint + "/facts/random");
+      setDataCatFact(response.data); // Mettre à jour l'état avec la donnée reçue
+    } catch (err) {
+      // Gérer les erreurs
+      if (err) {
+        setErrorFetch(err.toString());
+      } else {
+        setErrorFetch("Erreur lors du chargement des faits sur les chats");
+      }
+      
+    } finally {
+      // La requête est terminée, on enlève le chargement
+      setIsLoading(false); 
+    }
+  };
+
+  useEffect(() => {
+    fetchCatFact();
+  }, []);
+
+  return (
+    <div>
+      {isLoading && <p>Chargement en cours</p>}
+      {dataCatFact && <p> {dataCatFact?.text} </p>}
+      {errorFetch && <p> {errorFetch} </p>}
+      <button onClick={fetchCatFact}>Send request</button>
+    </div>
+  );
+};
+```
 ### Redux
 
 ### Extension VSCode 
