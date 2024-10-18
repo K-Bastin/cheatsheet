@@ -40,10 +40,59 @@ Si un projet est récuépérer depuis un github, le node_module est dans le .git
 ````
 pnpm run dev
 ````
+Par défault, le projet sera héberger sur le "http://localhost:5173/"
+
 ### Structure d'un projet
 ![Structure projet React](./structure.png)
 
 ### Les Hooks
+
+#### useEffect
+
+Le useEffect est du code qui sera éxécuté soit, au premier rendu du composant, soit à chaque rendu soit à chaque modification de la variable passé en paramètre du useEffect.
+
+Dans ce cas-ci, l'affichage dans la console sera effectué uniquement au premier rendu du composant.
+
+```
+  useEffect(() => {
+    console.log("Effectué une seule fois");
+    return () => {};
+  }, []);
+```
+
+Dans ce cas-ci, l'affichage dans la console sera effectué à chaque rendu du composant.
+
+```
+  useEffect(() => {
+    console.log("Effectué à chaque rendu");
+    return () => {};
+  });
+```
+
+Dans ce cas-ci, l'affichage dans la console sera effectué à chaque modification de la variable "Value".
+
+Attention au boucle infinie si du code dans ce useEffect met à jour la variable impliquée.
+```
+  useEffect(() => {
+    console.log("Effectué à chaque changement de la variable");
+    return () => {};
+  }, [value]);
+```
+
+#### useState
+
+Le useState est un hook utilisé pour ajouter un état local aux composants.
+Il retourne une paire [valeur, fonctionDeMiseAJour]  
+
+```
+  const [value, setValue] = useState<number | null>(null);
+```
+
+Il est important de noté que la fonction de mise à jour (setState) ne remplace par l'état immédiatement et que c'est une opération asynchrone. L'appel à au setState, planifie une mise à jour du composant et la valeur ne sera mise à jour qu'au rendu de celui ci.
+#### useRef
+
+### useId
+
 ### Le Typage
 
 ```
