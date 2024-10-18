@@ -54,7 +54,7 @@ Le useEffect est du code qui sera éxécuté soit, au premier rendu du composant
 
 Dans ce cas-ci, l'affichage dans la console sera effectué uniquement au premier rendu du composant.
 
-```typescript
+```tsx
   useEffect(() => {
     console.log("Effectué une seule fois");
     return () => {};
@@ -63,7 +63,7 @@ Dans ce cas-ci, l'affichage dans la console sera effectué uniquement au premier
 
 Dans ce cas-ci, l'affichage dans la console sera effectué à chaque rendu du composant.
 
-```typescript
+```tsx
   useEffect(() => {
     console.log("Effectué à chaque rendu");
     return () => {};
@@ -74,7 +74,7 @@ Dans ce cas-ci, l'affichage dans la console sera effectué à chaque modificatio
 
 Attention au boucle infinie si du code dans ce useEffect met à jour la variable impliquée.
 
-```typescript
+```tsx
   useEffect(() => {
     console.log("Effectué à chaque changement de la variable");
     return () => {};
@@ -86,7 +86,7 @@ Attention au boucle infinie si du code dans ce useEffect met à jour la variable
 Le useState est un hook utilisé pour ajouter un état local aux composants.
 Il retourne une paire [valeur, fonctionDeMiseAJour]  
 
-```typescript
+```tsx
   const [value, setValue] = useState<number>(0);
 ```
 
@@ -94,7 +94,7 @@ Il est important de noté que la fonction de mise à jour (setState) ne remplace
 
 Exemple ce code affichera 1 et non 2 car la valeur n'as pas encore été mise à jour.
 
-```typescript
+```tsx
       const [value, setValue] = useState<number>(0);
 
       setValue((prevValue) => prevValue + 1);
@@ -106,7 +106,7 @@ Exemple ce code affichera 1 et non 2 car la valeur n'as pas encore été mise à
 Ce hook permet de créer une référence mutable qui peut persister entre les rendu sans déclencher de render lorsqu'elle est modifiée. 
 Elle est utile pour accéder à des élements du DOM directement.
 
-```typescript
+```tsx
 function TextInputWithFocusButton() {
   const inputRef = useRef(null);
 
@@ -126,7 +126,7 @@ function TextInputWithFocusButton() {
 
 Ou pour stocker des valeurs persistance.
 
-```typescript
+```tsx
 function Counter() {
   const [count, setCount] = useState(0);
   const renderCount = useRef(1);
@@ -148,7 +148,7 @@ function Counter() {
 #### useId
 Ce hook permet de générer des identifiants unique qui peuvent être utilisé dans les composants, particulièrement utile pour créer les attributs id qui sont unique dans le DOM.
 
-```typescript
+```tsx
 function MyForm() {
   const id = useId();
 
@@ -163,7 +163,7 @@ function MyForm() {
 
 ### Le Typage
 
-```typescript
+```tsx
 type User = {
   id?: number;
   name: string;
@@ -181,7 +181,7 @@ Le "?" dans le typage signifique c'est une valeur qui n'est pas obligatoire.
 
 ### Les Enumération
 
-```typescript
+```tsx
 export enum Nat {
   BE = "BE",
   FR = "FR",
@@ -202,7 +202,7 @@ Dans le cas du statut, cette syntaxe signifique que Closed vaudra 2 et que ReOpe
 
 #### Passage par object
 
-```typescript
+```tsx
 import { ComposantEnfant } from "../ComposantEnfant/ComposantEnfant";
 
 export const ComposantParent = () => {
@@ -213,7 +213,7 @@ export const ComposantParent = () => {
   return <ComposantEnfant adress={adressUser}></ComposantEnfant>;
 };
 ```
-```typescript
+```tsx
 type ComposantEnfantProps = {
   adress: {
     street: string;
@@ -234,7 +234,7 @@ export const ComposantEnfant = ({ adress }: ComposantEnfantProps) => {
 ```
 #### Passage direct
 
-```typescript
+```tsx
 import { ComposantEnfant } from "../ComposantEnfant/ComposantEnfant";
 
 export const ComposantParent = () => {
@@ -246,7 +246,7 @@ export const ComposantParent = () => {
 };
 ```
 
-```typescript
+```tsx
 type ComposantEnfantProps = {
   name: string;
   email: string;
@@ -271,7 +271,7 @@ export const ComposantEnfant = (user: ComposantEnfantProps) => {
 
 Exemple d'un formulaire basique de login.
 
-```typescript
+```tsx
 import { useForm } from "react-hook-form";
 
 type LoginProps = {
@@ -329,7 +329,7 @@ export const FormComponent = () => {
 Afin de valider les données d'un formulaire, il est possible de passer par une bibliothèque comme Yup. Celle-ci permet d'établir un schéma avec les définitions des obligations des champs du formulaire.
 Exemple de code
 
-```typescript
+```tsx
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import * as Yup from "yup";
@@ -397,7 +397,7 @@ export const FormComponent = () => {
 
 Exemple de code pour un get avec Axios.
 
-```typescript
+```tsx
 import axios from "axios";
 import { useEffect, useState } from "react";
 
@@ -472,7 +472,7 @@ export const AxiosComponent = () => {
 Example de code: Application affichant des "Cat fact" qui viennent d'une API.
 Création du store dans l'application. Avec redux, celui-ci doit être unique et ne sera fait qu'une seule fois. il sera cependant modifié pour rajouter les nouveaux reducer.
 
-```typescript
+```tsx
 //Fichier store.ts
 import { configureStore } from "@reduxjs/toolkit";
 import catFactReducer from "./catFact/catFact.reducer";
@@ -496,7 +496,7 @@ export default store;
 
 Création des actions et du reducer
 
-```typescript
+```tsx
 //Fichier catFact.action.ts
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { requestNewCatFact } from "../../services/catFact.service";
@@ -514,7 +514,7 @@ export const getCatFact = createAsyncThunk("catFact/getCatFact", async () => {
 });
 ```
 
-```typescript
+```tsx
 //Fichier catFact.reducer.ts
 import { createReducer } from "@reduxjs/toolkit";
 import { getCatFact } from "./catFact.action";
@@ -557,7 +557,7 @@ export default catFactReducer;
 
 Création du service permettant de récupérer via Axios les données d'une API (ici un simple GET afin de récupérer un "cat fact")
 
-```typescript
+```tsx
 //Fichier catFact.services.ts
 import axios from "axios";
 
@@ -574,7 +574,7 @@ export const requestNewCatFact = async () => {
 
 Englober l'application dans le store afin quce celui-ci soit disponible partout.
 
-```typescript
+```tsx
 //Fichier main.tsx
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
@@ -598,7 +598,7 @@ Dans cet exemple, division en 3 composants :
  - CatFactComponentList : Composant qui affiches CatFactComponentItem. Son parent lui a passer la liste des Catfacts. Il les passera ensuite un part un à son enfant CatFactComponentListItem.
  - CatFactComponentListItem : Composant qui se charge uniquement d'afficher le catFact. Son parent CatFactComponentList lui à uniquement passer le Catfact qu'il doit afficher
    
-```typescript
+```tsx
 //Fichier CatFactComponent.tsx
 import { useDispatch, useSelector } from "react-redux";
 import { getCatFact } from "../../store/catFact/catFact.action";
@@ -629,7 +629,7 @@ export const CatFactComponent = () => {
 };
 ```
 
-```typescript
+```tsx
 //Fichier CatFactComponentList
 import { CatFact } from "../../store/catFact/catFact.reducer";
 import { CatFactComponentListItem } from "./CatFactComponentListItem";
@@ -651,7 +651,7 @@ export const CatFactComponentList = ({
 };
 ```
 
-```typescript
+```tsx
 //Fichier CatFactComponentListItem
 import { CatFact } from "../../store/catFact/catFact.reducer";
 
