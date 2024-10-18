@@ -513,7 +513,8 @@ export const getCatFact = createAsyncThunk("catFact/getCatFact", async () => {
   return data;
 });
 ```
-```
+
+```typescript
 //Fichier catFact.reducer.ts
 import { createReducer } from "@reduxjs/toolkit";
 import { getCatFact } from "./catFact.action";
