@@ -85,13 +85,75 @@ Le useState est un hook utilisé pour ajouter un état local aux composants.
 Il retourne une paire [valeur, fonctionDeMiseAJour]  
 
 ```
-  const [value, setValue] = useState<number | null>(null);
+  const [value, setValue] = useState<number>(0);
 ```
 
 Il est important de noté que la fonction de mise à jour (setState) ne remplace par l'état immédiatement et que c'est une opération asynchrone. L'appel à au setState, planifie une mise à jour du composant et la valeur ne sera mise à jour qu'au rendu de celui ci.
+
+Exemple ce code affichera 1 et non 2 car la valeur n'as pas encore été mise à jour.
+```
+      const [value, setValue] = useState<number>(0);
+
+      setValue((prevValue) => prevValue + 1);
+      setValue((prevValue) => prevValue + 1);
+```
+
 #### useRef
 
+Ce hook permet de créer une référence mutable qui peut persister entre les rendu sans déclencher de render lorsqu'elle est modifiée. 
+Elle est utile pour accéder à des élements du DOM directement.
+```
+function TextInputWithFocusButton() {
+  const inputRef = useRef(null);
+
+  const focusInput = () => {
+    // Accède à l'élément DOM via inputRef.current et applique le focus
+    inputRef.current.focus();
+  };
+
+  return (
+    <div>
+      <input ref={inputRef} type="text" />
+      <button onClick={focusInput}>Focus sur l'input</button>
+    </div>
+  );
+}
+```
+
+Ou pour stocker des valeurs persistance.
+```
+function Counter() {
+  const [count, setCount] = useState(0);
+  const renderCount = useRef(1);
+
+  useEffect(() => {
+    renderCount.current += 1;
+  });
+
+  return (
+    <div>
+      <p>Le compteur est à : {count}</p>
+      <p>Le composant a été rendu {renderCount.current} fois</p>
+      <button onClick={() => setCount(count + 1)}>Incrémenter</button>
+    </div>
+  );
+}
+```
+
 ### useId
+Ce hook permet de générer des identifiants unique qui peuvent être utilisé dans les composants, particulièrement utile pour créer les attributs id qui sont unique dans le DOM.
+```
+function MyForm() {
+  const id = useId();
+
+  return (
+    <div>
+      <label htmlFor={`${id}-name`}>Nom :</label>
+      <input id={`${id}-name`} type="text" />
+    </div>
+  );
+}
+```
 
 ### Le Typage
 
