@@ -16,6 +16,7 @@
 
 ## React
 
+<!--  TODO Explication de vite (bundler qui compile) !-->
 ### Créer un projet avec vite
 
 ````
@@ -258,6 +259,8 @@ export const ComposantEnfant = (user: ComposantEnfantProps) => {
 
 
 ```
+### Routing avec react router
+<!-- TODO !-->
 
 ### Formulaire avec React-Hook-Form
 
@@ -693,6 +696,7 @@ export const CatFactComponentListItem = ({
   - Axios
   - json-server
   - Redux
+  - React-router
 
 ### Extension navigateur
 
@@ -723,9 +727,12 @@ export const CatFactComponentListItem = ({
   - [Axios](https://axios-http.com/docs/intro)
   - [SWR](https://swr.vercel.app/)
   - [Redux](https://redux.js.org/)
+  - [React-router](https://reactrouter.com/en/main)
 
 ### Interface
 
   - [Uiball](https://uiball.com/ldrs/)
+
+    <!-- repos avec projet et code pour chaque point (react router, hook, etc...    !-->
 
   
