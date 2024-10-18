@@ -1,20 +1,12 @@
 # Cheatsheet 
 
-## Html
+## Gestionnaire de package
 
-### Balises
-
-## Css
-
-### Quelques règles  importante
-
-## Javascript
-
-## Pnpm
-
-pnpm
-: Pnpm est un gestionnaire de paquet (comme npm you yarn) qui permet l'installation des diverses dépendances liées au projet.
-L'avantage de Pnpm par rapport à npm est qu'il met en cache les paquets et réalise des liens symboliques, évitant le téléchargement des paquets à chaque nouveau projets. Ce qui évite des perdres de l'espace disque inutilement ainsi que le temps de téléchargement.
+| Nom du gestionnaire | Avantages | Inconvénients |
+| ----------- | ----------- | ----------- |
+| npm | Intégré à NodeJS <br> Compatible avec tous les paquets JS <br> Communauté <br> Simplicité d'usage | Vitesse <br> Gestion des dépendances <br> Poids des installations |
+| pnpm | Vitesse <br> Espace disque réduit <br> Intégration facile avec npm <br> isolation des dépendances | Moins répandu <br> Compatibilité | 
+| Yarn | Vitesse <br> Fiabilité <br> Installation parallèle <br> Plug'n'Play | Poids des installations <br> Différence avec npm <br> Mise à jour moins fréquentes| 
 
 ### Installer/Activer pnpm
 
@@ -35,10 +27,13 @@ Plusieurs questions vont être posées
   3. Choix Javascript ou typescript (+ SWC)
 
 Ensuite se rendre dans le dossier ou l'installation à été faite
+
 ````
 pnpm install
 ````
-Le projet est ainsi crée.
+
+Cette commande permet de télécharger les dépendances spécifiées dans le packages.json (node_modules)
+Si un projet est récuépérer depuis un github, le node_module est dans le .gitignore et n'est pas récupérer, il est donc nécessaire de faire cette commande pour télécharger les dépendances.
 
 ### Lancer un projet en local
 
@@ -46,10 +41,117 @@ Le projet est ainsi crée.
 pnpm run dev
 ````
 ### Structure d'un projet
+![Structure projet React](./structure.png)
 
-### Typage
+### Les Hooks
+### Le Typage
+
+```
+type User = {
+  id?: number;
+  name: string;
+  firstname: string;
+  adress: adress;
+};
+
+type Adress = {
+  street: string;
+  postalCode: number;
+  houseNumber: number;
+};
+```
+Le "?" dans le typage signifique c'est une valeur qui n'est pas obligatoire.
+
+### Les Enumération
+
+```
+export enum Nat {
+  BE = "BE",
+  FR = "FR",
+  IT = "IT",
+  UK = "UK",
+}
+
+export enum Statut {
+  InProgress = 1,
+  Closed,
+  ReOpen,
+}
+```
+
+Dans le cas du statut, cette syntaxe signifique que Closed vaudra 2 et que ReOpen vaudra 3 et ainsi de suite.
 
 ### Passage de props 
+
+#### Passage par object
+
+```
+import { ComposantEnfant } from "../ComposantEnfant/ComposantEnfant";
+
+export const ComposantParent = () => {
+  const adressUser = {
+    street: "Avenue Jean Mermoz, 28",
+    postalCode: "6040",
+  };
+  return <ComposantEnfant adress={adressUser}></ComposantEnfant>;
+};
+```
+```
+type ComposantEnfantProps = {
+  adress: {
+    street: string;
+    postalCode: string;
+  };
+};
+export const ComposantEnfant = ({ adress }: ComposantEnfantProps) => {
+  return (
+    <div>
+      <div>
+        <p>Rue: {adress.street}</p>
+        <p>Code postal: {adress.postalCode}</p>
+      </div>
+    </div>
+  );
+};
+
+```
+#### Passage direct
+
+```
+import { ComposantEnfant } from "../ComposantEnfant/ComposantEnfant";
+
+export const ComposantParent = () => {
+  const user = {
+    name: "john",
+    email: "john@doe.com",
+  };
+  return <ComposantEnfant {...user}></ComposantEnfant>;
+};
+```
+
+```
+type ComposantEnfantProps = {
+  name: string;
+  email: string;
+};
+export const ComposantEnfant = (user: ComposantEnfantProps) => {
+  return (
+    <div>
+      <div>
+        <p>Nom: {user.name}</p>
+        <p>Email: {user.email}</p>
+      </div>
+    </div>
+  );
+};
+
+
+```
+
+### Formulaire avec React-Hook-Form
+### Validation avec Yup
+### Requête HTTP
+### Redux
 
 ### Extension VSCode 
 ### Raccourcis VSCode
@@ -66,6 +168,9 @@ pnpm run dev
 
 ### Extension navigateur
 
+  -  Redux DevTools
+  -  React Developper Tools
+    
 ## Documentation / Lien utile
 
 ### Utilitaire
