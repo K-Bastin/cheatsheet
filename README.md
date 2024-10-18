@@ -643,8 +643,46 @@ export const CatFactComponentListItem = ({
 };
 ```
 
-### Extension VSCode 
-### Raccourcis VSCode
+### Extension utile VSCode 
+- Better comments
+- CodeSnap
+- Color Highlight
+- Auto Rename Tag
+- Error Lens
+- ES7 + React/Redux/React-native snippets
+- ESLint
+- gitignore
+- GitLens
+- indent-rainbow
+- Javascript (ES6) code snippets
+- Path intellisense
+- Prettier
+- Prettier ESLint
+- Pretty TypeScript errors
+- SVG
+- Tailwind CSS IntelliSense
+- Thunder Client
+- VSCode React Refactor
+  
+### Raccourcis utile VSCode
+
+ - **Recherche** : `Ctrl + Shift + F`
+ - **Formater le code** : `Alt + Shift + F`
+ - **Sélectionner la prochaine paire d'accolades** : `Ctrl + Shift + ]`
+ - **Rechercher et remplacer dans le fichier** : `Ctrl + H`
+ - **Ouvrir le terminal** : `Ctrl + Shift + ù`
+ - **Rechercher dans le fichier** : `Ctrl + F`
+ - **Mettre en commentaire la sélection : `Ctrl + :`
+ - **Aller à la définition** : `F12`
+ - **Afficher des suggestions de code** : `Ctrl + espace`
+ - **Indentation automatique** : `Ctrl + Shift + I`
+ - **Déplacer la ligne vers la bas/haut : `Alt +  ↓ / ↑`
+ - **Copier la ligne vers le bas/haut** : `Alt + Shift + ↓ / ↑`
+ - **Changer le nom de la variable partout dans le fichier** : `F2`
+ - **Sélection multiple de curseurs** + : `Ctrl + D`
+ - **Ouvrir le panneau de commande** : `Ctrl + Shift + P`
+ - **Supprimer la ligne** : `Ctrl + Shift + K`
+ - 
 ### Bibliothèque 
 
   - i18n
