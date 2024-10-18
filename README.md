@@ -145,7 +145,7 @@ function Counter() {
 }
 ```
 
-### useId
+#### useId
 Ce hook permet de générer des identifiants unique qui peuvent être utilisé dans les composants, particulièrement utile pour créer les attributs id qui sont unique dans le DOM.
 
 ```typescript
