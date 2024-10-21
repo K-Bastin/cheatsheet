@@ -76,8 +76,8 @@ export const SimpleComponent = () => {
 
 ### Fonction sur les Arrays
 
-Filtre()
-Renvoie tous les valeurs qui correspondent au filtre.
+Array.filter()
+La fonction filter() est utilisée pour créer un nouveau tableau qui contient uniquement les éléments du tableau d'origine qui répondent à une certaine condition
 ```tsx
   const [tableValue, setTableValue] = useState<string[]>([
     "Abricot",
@@ -89,8 +89,9 @@ Renvoie tous les valeurs qui correspondent au filtre.
     setTableValue([...tableValue.filter((e) => e !== "Beignet")]);
   };
 ```
-Reduce()
-Applique un accumulateur. Dans cet exemple, renvois le nombre d'élément différent de "Beignet"
+
+Array.reduce()
+La fonction reduce() est utilisé pour réduire un tableau à une seule valeur en application une fonction accumulant les résultats précédents.
 
 ```tsx
   const [tableValue, setTableValue] = useState<string[]>([
@@ -112,8 +113,8 @@ Applique un accumulateur. Dans cet exemple, renvois le nombre d'élément diffé
   };
 ```
 
-ForEach()
-Parcours chaque element du tableau.
+Array.forEach()
+Applique une fonction à chaque élément d'un tableau existant mais ne renvoie aucune valeur.
 
 ```tsx
   const [tableValue, setTableValue] = useState<string[]>([
@@ -127,8 +128,8 @@ Parcours chaque element du tableau.
   };
 ```
 
-Map()
-la fonction map est utilisée pour créer un nouveau tableau en appliquant une fonction à chaque élément d'un tableau existant.
+Array.map()
+La fonction map est utilisée pour créer un nouveau tableau en appliquant une fonction à chaque élément d'un tableau existant.
 
 ```tsx
       <div>
