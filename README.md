@@ -72,7 +72,70 @@ export const SimpleComponent = () => {
     </>
   );
 };
+```
 
+### Fonction sur les Arrays
+
+Filtre()
+Renvoie tous les valeurs qui correspondent au filtre.
+```tsx
+  const [tableValue, setTableValue] = useState<string[]>([
+    "Abricot",
+    "Beignet",
+    "Fraise",
+    "Pomme",
+  ]);
+  const handleArrayFunctionFilter = () => {
+    setTableValue([...tableValue.filter((e) => e !== "Beignet")]);
+  };
+```
+Reduce()
+Applique un accumulateur. Dans cet exemple, renvois le nombre d'élément différent de "Beignet"
+
+```tsx
+  const [tableValue, setTableValue] = useState<string[]>([
+    "Abricot",
+    "Beignet",
+    "Fraise",
+    "Pomme",
+  ]);
+  const handleArrayFunctionReduce = () => {
+    const reduceTable = tableValue.reduce((accumulateur, valeur) => {
+      if (valeur !== "Beignet") {
+        accumulateur += 1;
+      }
+      return accumulateur;
+    }, 0);
+
+    //Resultat = 3
+    console.log(reduceTable);
+  };
+```
+
+ForEach()
+Parcours chaque element du tableau.
+
+```tsx
+  const [tableValue, setTableValue] = useState<string[]>([
+    "Abricot",
+    "Beignet",
+    "Fraise",
+    "Pomme",
+  ]);
+  const handleArrayFunctionForEach = () => {
+    tableValue.forEach((element) => console.log(element));
+  };
+```
+
+Map()
+la fonction map est utilisée pour créer un nouveau tableau en appliquant une fonction à chaque élément d'un tableau existant.
+
+```tsx
+      <div>
+        {tableValue.map((e, i) => {
+          return <p key={i}>{e}</p>;
+        })}
+      </div>
 ```
 
 ### Affichage conditionnel
