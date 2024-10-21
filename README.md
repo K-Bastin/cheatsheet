@@ -387,7 +387,7 @@ export const PageNotFound = () => {
 
 **Création d'un système d'authentification basique via le context**
 
-Ce code se charge d'allez voir dans le localStore si un objet "token" existe, si il existe il définit qu'on est identifié.
+Ce code se charge d'allez voir dans le localStore si un objet "token" existe, cela signifie qu'on est identifié.
 
 ```tsx
 import { FC, ReactNode, createContext, useContext, useState } from "react";
@@ -424,8 +424,8 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
 };
 ```
 
-Ensuite on définit des composants pour les routes privées et les routes publiques.
-Ces composants vont utiliser le context du système d'authentification pour vérifier si on est connecté ou non et nous redirigés.
+Ensuite, on définit des composants pour les routes privées et les routes publiques.
+Ces composants vont utiliser le contexte du système d'authentification pour vérifier si l'utilisateur est connecté ou non et nous rediriger en conséquence.
 
 ```tsx
 import React from "react";
@@ -442,8 +442,8 @@ const PrivateRoute = ({ Component }: { Component: React.ComponentType }) => {
 export default PrivateRoute;
 ```
 
-Le composant publicRoute va quant à lui empecher l'accès aux pages publique pour les utilisateurs qui sont connecté.
-Par exemple, empecher à un utiliser déjà connecté d'afficher la page de login à l'application.
+Le composant PublicRoute, quant à lui, va empêcher l'accès aux pages publiques pour les utilisateurs déjà connectés.
+Par exemple, il empêchera un utilisateur déjà connecté d'afficher la page de connexion de l'application.
 
 ```tsx
 import { Navigate } from "react-router-dom";
