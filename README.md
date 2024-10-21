@@ -1,4 +1,4 @@
-# Cheatsheet 
+# CheatSheet 
 
 ## Gestionnaire de package
 
