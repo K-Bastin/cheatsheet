@@ -16,7 +16,6 @@
 
 ## React
 
-<!--  TODO Explication de vite (bundler qui compile) !-->
 ### Créer un projet avec Vite
 
 Vite est un bundler, il permet de compiler les fichiers Javascript, css, etc ...
@@ -48,12 +47,48 @@ Cette commande est en réalité un script que vous pouvez retrouver dans votre p
 Par défault, le projet sera héberger sur le http://localhost:5173/
 
 ### Structure d'un projet
+
+Voici une idée globale de la structure d'un projet. 
+Les dossiers dépendront de la façon dont l'équipe veut structurer les projets mais ce screenshot montre l'idée générale. Il pourra il avoir d'autre dossier comme pour le store, le routing, les middlewares et autres.
+
 ![Structure projet React](./structure.png)
 
 ### Création et utilisation d'un composant simple
-//TODO
+
+Un composant React est simplement un fichier .jsx (.tsx en typescript) qui contient une fonction qui retourne du jsx. Ne pas oubliez de l'exporter afin qu'elle soit disponible ailleurs dans le programme.
+Le composant ne peut renvoyer qu'un seul élement html, afin de ne pas générer des balises inutiles, il est possible d'utiliser les fragments, "<> </>"
+```
+export const SimpleComponent = () => {
+
+  return (
+    <>
+      <h1>Hello world</h1>
+    </>
+  );
+};
+
+```
 
 ### Affichage conditionnel
+
+L'opérateur "??" est utilisé pour fournir une valeur par défaut lorsqu'une variable est null ou undifined"
+Dans ce cas-ci comme age est égal à null, c'est "Non renseigné" qui sera affiché. Si on lui assigne une valeur, alors ça sera son contenu qui sera affiché.
+
+L'opérateur "&&" sera lui utilisé pour afficher une élement si la condition est vraie. Ici afficherPrenom est à vrai donc "Kevin" est affiché.
+
+```
+export const SimpleComponent = () => {
+  const afficherPrenom: boolean = true;
+  const afficherAge: boolean = true;
+  const age = null;
+  return (
+    <>
+      <h1>Hello world {afficherPrenom && <p>Kevin</p>}</h1>
+      {afficherAge && <p>Tu as {age ?? "Non renseigné"} an</p>}
+    </>
+  );
+};
+```
 
 ### Les Hooks
 
@@ -305,7 +340,166 @@ export const ComposantEnfant = (user: ComposantEnfantProps) => {
 
 ```
 ### Routing avec react router
-<!-- TODO !-->
+
+Afin de gérer le routing, il faudra utilisé une biliothèque tel que React router.
+Dans cet exemple de code, en plus du routing basique, il y aura la protection de page privée nécéssitant une connexion au préalable.
+
+Création de 3 page basique, une page publique, une page privée et une page pour url non connue.
+
+**Page publique**
+```
+//fichier PagePublic.tsx
+export const PagePublic = () => {
+  return (
+    <div>
+      <h1>Page publique</h1>
+      <p>Vous êtes sur une page publique, accessible par tous le monde.</p>
+    </div>
+  );
+};
+```
+
+**Page privée**
+
+```
+export const PagePrivate = () => {
+  return (
+    <div>
+      <h1>Page protégée</h1>
+      <p>Vous êtes sur une page nécéssitant d'être loggin.</p>
+    </div>
+  );
+};
+```
+
+**Page de redirection - 404 not found**
+
+```
+export const PageNotFound = () => {
+  return (
+    <div>
+      <h1>Error 404 - Not Found</h1>
+    </div>
+  );
+};
+```
+
+**Création d'un système d'authentification basique via le context**
+
+Ce code se charge d'allez voir dans le localStore si un objet "token" existe, si il existe il définit qu'on est identifié.
+
+```
+import { FC, ReactNode, createContext, useContext, useState } from "react";
+
+interface AuthContextType {
+  isAuthenticated: boolean;
+}
+
+const AuthContext = createContext<AuthContextType | null>(null);
+
+export const useAuth = () => {
+  const context = useContext(AuthContext);
+  if (context === undefined) {
+    throw new Error("useAuth must be used within an AuthProvider");
+  }
+  return context;
+};
+
+interface AuthProviderProps {
+  children: ReactNode;
+}
+
+export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
+  const [token, setToken] = useState<string | null>(
+    localStorage.getItem("token")
+  );
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(!!token);
+
+  return (
+    <AuthContext.Provider value={{ isAuthenticated }}>
+      {children}
+    </AuthContext.Provider>
+  );
+};
+```
+
+Ensuite on définit des composants pour les routes privées et les routes publiques.
+Ces composants vont utiliser le context du système d'authentification pour vérifier si on est connecté ou non et nous redirigés.
+
+```
+import React from "react";
+import { Navigate } from "react-router-dom";
+
+import { useAuth } from "../../middleware/AuthProvider";
+
+const PrivateRoute = ({ Component }: { Component: React.ComponentType }) => {
+  const authContext = useAuth();
+
+  return authContext?.isAuthenticated ? <Component /> : <Navigate to="/" />;
+};
+
+export default PrivateRoute;
+```
+
+Le composant publicRoute va quant à lui empecher l'accès aux pages publique pour les utilisateurs qui sont connecté.
+Par exemple, empecher à un utiliser déjà connecté d'afficher la page de login à l'application.
+
+```
+import { Navigate } from "react-router-dom";
+
+import { useAuth } from "../../middleware/AuthProvider";
+
+const PublicRoute = ({ Component }: { Component: React.ComponentType }) => {
+  const authContext = useAuth();
+
+  return authContext?.isAuthenticated ? (
+    <Navigate to="/private" />
+  ) : (
+    <Component />
+  );
+};
+
+export default PublicRoute;
+```
+
+Il ne reste plus qu'à englober l'application dans le contexte d'authentification et utiliser react router pour définir les chemins des composants.
+Ici l'application ne reconnait que les routes "/" et "/private", les autres urls renverront vers le composants "404 - not fund"
+Le chemin "/" affiche la page publique et le chemin "/" private nécessite d'être "log" pour être affichées
+
+```
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import "./App.css";
+import PrivateRoute from "./Components/Auth/PrivateRoute";
+import PublicRoute from "./Components/Auth/PublicRoute";
+import { AuthProvider } from "./middleware/AuthProvider";
+import { PageNotFound } from "./Pages/PageNotFound";
+import { PagePrivate } from "./Pages/PagePrivate";
+import { PagePublic } from "./Pages/PagePublic";
+
+function App() {
+  return (
+    <>
+      <AuthProvider>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<PublicRoute Component={PagePublic} />} />
+            <Route
+              path="/private"
+              element={<PrivateRoute Component={PagePrivate} />}
+            />
+            <Route
+              path="*"
+              element={<PublicRoute Component={PageNotFound} />}
+            />
+          </Routes>
+        </BrowserRouter>
+      </AuthProvider>
+    </>
+  );
+}
+
+export default App;
+```
 
 ### Formulaire avec React-Hook-Form
 
