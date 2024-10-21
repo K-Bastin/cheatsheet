@@ -57,7 +57,8 @@ Les dossiers dépendront de la façon dont l'équipe veut structurer les projets
 
 Un composant React est simplement un fichier .jsx (.tsx en typescript) qui contient une fonction qui retourne du jsx. Ne pas oubliez de l'exporter afin qu'elle soit disponible ailleurs dans le programme.
 Le composant ne peut renvoyer qu'un seul élement html, afin de ne pas générer des balises inutiles, il est possible d'utiliser les fragments, "<> </>"
-```
+
+```tsx
 export const SimpleComponent = () => {
 
   return (
@@ -76,7 +77,7 @@ Dans ce cas-ci comme age est égal à null, c'est "Non renseigné" qui sera affi
 
 L'opérateur "&&" sera lui utilisé pour afficher une élement si la condition est vraie. Ici afficherPrenom est à vrai donc "Kevin" est affiché.
 
-```
+```tsx
 export const SimpleComponent = () => {
   const afficherPrenom: boolean = true;
   const afficherAge: boolean = true;
@@ -127,7 +128,7 @@ Attention au boucle infinie si du code dans ce useEffect met à jour la variable
 
 Dans le useEffect, il est possible de spécifié une fonction de "nettoyage" via le return. Ce qui permet de nettoyer des ressources comme des abonnements, des timers ou des événements.
 
-```
+```tsx
 useEffect(() => {
   const interval = setInterval(() => {
     console.log("Intervalle actif");
@@ -166,7 +167,7 @@ Exemple ce code affichera 1 et non 2 car la valeur n'as pas encore été mise à
 
 Il est important de toujours travailler sur une copie de l'état afin de ne pas écraser des parties, le plus simple reste d'utilisé l'opérateur de décomposition "..." .
 
-```
+```tsx
 const [person, setPerson] = useState({ name: 'John', age: 30 });
 
 function updateName(newName) {
@@ -347,7 +348,7 @@ Dans cet exemple de code, en plus du routing basique, il y aura la protection de
 Création de 3 page basique, une page publique, une page privée et une page pour url non connue.
 
 **Page publique**
-```
+```tsx
 //fichier PagePublic.tsx
 export const PagePublic = () => {
   return (
@@ -361,7 +362,7 @@ export const PagePublic = () => {
 
 **Page privée**
 
-```
+```tsx
 export const PagePrivate = () => {
   return (
     <div>
@@ -374,7 +375,7 @@ export const PagePrivate = () => {
 
 **Page de redirection - 404 not found**
 
-```
+```tsx
 export const PageNotFound = () => {
   return (
     <div>
@@ -388,7 +389,7 @@ export const PageNotFound = () => {
 
 Ce code se charge d'allez voir dans le localStore si un objet "token" existe, si il existe il définit qu'on est identifié.
 
-```
+```tsx
 import { FC, ReactNode, createContext, useContext, useState } from "react";
 
 interface AuthContextType {
@@ -426,7 +427,7 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
 Ensuite on définit des composants pour les routes privées et les routes publiques.
 Ces composants vont utiliser le context du système d'authentification pour vérifier si on est connecté ou non et nous redirigés.
 
-```
+```tsx
 import React from "react";
 import { Navigate } from "react-router-dom";
 
@@ -444,7 +445,7 @@ export default PrivateRoute;
 Le composant publicRoute va quant à lui empecher l'accès aux pages publique pour les utilisateurs qui sont connecté.
 Par exemple, empecher à un utiliser déjà connecté d'afficher la page de login à l'application.
 
-```
+```tsx
 import { Navigate } from "react-router-dom";
 
 import { useAuth } from "../../middleware/AuthProvider";
@@ -466,7 +467,7 @@ Il ne reste plus qu'à englober l'application dans le contexte d'authentificatio
 Ici l'application ne reconnait que les routes "/" et "/private", les autres urls renverront vers le composants "404 - not fund"
 Le chemin "/" affiche la page publique et le chemin "/" private nécessite d'être "log" pour être affichées
 
-```
+```tsx
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
 import PrivateRoute from "./Components/Auth/PrivateRoute";
