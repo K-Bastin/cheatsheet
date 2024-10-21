@@ -10,6 +10,8 @@
 
 **Les commandes npm, pnpm et yarn doivent être éxécutée dans un terminal de commande ou directement dans le terminal de Visual code**
 
+**Attention, de base VS Code ouvre un terminal Powershell, l'éxécution des commandes peut poser problèmes si l'éxécution des scripts est bloqué sur la machine**
+
 ### Installer/Activer pnpm
 
 ````
@@ -58,7 +60,7 @@ Il pourra il avoir d'autres dossiers comme pour le store, le routing, les middle
 
 ### Création et utilisation d'un composant simple
 
-Un composant React est simplement un fichier .jsx (.tsx en typescript) qui contient une fonction qui retourne du jsx. Ne pas oubliez de l'exporter afin qu'elle soit disponible ailleurs dans le programme.
+Un composant React est simplement un fichier .jsx (.tsx en typescript) qui contient une fonction qui retourne du jsx. Ne pas oublier de l'exporter afin qu'elle soit disponible ailleurs dans le programme.
 Le composant ne peut renvoyer qu'un seul élement html, afin de ne pas générer des balises inutiles, il est possible d'utiliser les fragments, "<> </>"
 
 ```tsx
@@ -75,7 +77,7 @@ export const SimpleComponent = () => {
 
 ### Affichage conditionnel
 
-L'opérateur "??" est utilisé pour fournir une valeur par défaut lorsqu'une variable est null ou undifined"
+L'opérateur "??" est utilisé pour fournir une valeur par défaut lorsqu'une variable est null ou undefined"
 Dans ce cas-ci comme age est égal à null, c'est "Non renseigné" qui sera affiché. Si on lui assigne une valeur, alors ça sera son contenu qui sera affiché.
 
 L'opérateur "&&" sera lui utilisé pour afficher une élement si la condition est vraie. Ici afficherPrenom est à vrai donc "Kevin" est affiché.
@@ -120,7 +122,7 @@ Dans ce cas-ci, l'affichage dans la console sera effectué à chaque rendu du co
 
 Dans ce cas-ci, l'affichage dans la console sera effectué à chaque modification de la variable "Value" qui est la variable qu'on lui a passé en paramètre.
 
-Attention au boucle infinie si du code dans ce useEffect met à jour la variable impliquée.
+Attention aux boucles infinies si du code dans ce useEffect met à jour la variable impliquée.
 
 ```tsx
   useEffect(() => {
@@ -129,7 +131,7 @@ Attention au boucle infinie si du code dans ce useEffect met à jour la variable
   }, [value]);
 ```
 
-Dans le useEffect, il est possible de spécifié une fonction de "nettoyage" via le return. Ce qui permet de nettoyer des ressources comme des abonnements, des timers ou des événements.
+Dans le useEffect, il est possible de spécifier une fonction de "nettoyage" via le return. Ce qui permet de nettoyer des ressources comme des abonnements, des timers ou des événements.
 
 ```tsx
 useEffect(() => {
@@ -149,16 +151,16 @@ Il retourne une paire [valeur, fonctionDeMiseAJour]
 
 Cet état doit toujours être modifié via sa fonction de miseAJour sinon React ne sait pas qu'il doit render le composant.
 
-Ici une état "value" est définit du type "number" et initialisé à 0;
+Ici l'état "value" est de type "number" et initialisé à 0;
 
 ```tsx
   const [value, setValue] = useState<number>(0);
 ```
 
-Il est important de noté que la fonction de mise à jour (setState) ne remplace par l'état immédiatement et que c'est une opération asynchrone. 
-L'appel à au setState, planifie une mise à jour du composant et la valeur ne sera mise à jour qu'au rendu de celui ci.
+Il est important de noter que la fonction de mise à jour (setState) ne remplace pas l'état immédiatement et que c'est une opération asynchrone. 
+L'appel au setState planifie une mise à jour du composant et la valeur ne sera mise à jour qu'au rendu de celui-ci.
 
-Exemple ce code affichera 1 et non 2 car la valeur n'as pas encore été mise à jour.
+Exemple : ce code affichera 1 et non 2 car la valeur n'a pas encore été mise à jour. 
 
 ```tsx
       const [value, setValue] = useState<number>(0);
@@ -168,7 +170,7 @@ Exemple ce code affichera 1 et non 2 car la valeur n'as pas encore été mise à
       console.log(value);
 ```
 
-Il est important de toujours travailler sur une copie de l'état afin de ne pas écraser des parties, le plus simple reste d'utilisé l'opérateur de décomposition "..." .
+Il est important de toujours travailler sur une copie de l'état afin de ne pas écraser des parties, le plus simple reste d'utiliser l'opérateur de décomposition "..." .
 
 ```tsx
 const [person, setPerson] = useState({ name: 'John', age: 30 });
@@ -180,7 +182,7 @@ function updateName(newName) {
 
 #### useRef
 
-Ce hook permet de créer une référence mutable qui peut persister entre les rendu sans déclencher de render lorsqu'elle est modifiée. 
+Ce hook permet de créer une référence mutable qui peut persister entre les rendus sans déclencher de render lorsqu'elle est modifiée. 
 Elle est utile pour accéder à des élements du DOM directement.
 
 ```tsx
@@ -201,7 +203,7 @@ function TextInputWithFocusButton() {
 }
 ```
 
-Ou pour stocker des valeurs persistance.
+Ou pour stocker des valeurs persistantes.
 
 ```tsx
 function Counter() {
@@ -223,7 +225,8 @@ function Counter() {
 ```
 
 #### useId
-Ce hook permet de générer des identifiants unique qui peuvent être utilisé dans les composants, particulièrement utile pour créer les attributs id qui sont unique dans le DOM.
+
+Ce hook permet de générer des identifiants uniques qui peuvent être utilisés dans les composants, c'est particulièrement utile pour créer les attributs id qui sont uniques dans le DOM.
 
 ```tsx
 function MyForm() {
@@ -345,10 +348,11 @@ export const ComposantEnfant = (user: ComposantEnfantProps) => {
 ```
 ### Routing avec react router
 
-Afin de gérer le routing, il faudra utilisé une biliothèque tel que React router.
-Dans cet exemple de code, en plus du routing basique, il y aura la protection de page privée nécéssitant une connexion au préalable.
+Afin de gérer le routing, il faudra utiliser une bibliothèque telle que React router. 
 
-Création de 3 page basique, une page publique, une page privée et une page pour url non connue.
+Dans cet exemple de code, en plus du routing basique, il y aura la protection de page privée nécessitant une connexion au préalable.
+
+Création de 3 pages basiques : une page publique, une page privée et une page pour url non connue.
 
 **Page publique**
 ```tsx
@@ -390,7 +394,7 @@ export const PageNotFound = () => {
 
 **Création d'un système d'authentification basique via le context**
 
-Ce code se charge d'allez voir dans le localStore si un objet "token" existe, cela signifie qu'on est identifié.
+Ce code se charge d'aller voir dans le localStore si un objet "token" existe, cela signifie qu'on est identifié.
 
 ```tsx
 import { FC, ReactNode, createContext, useContext, useState } from "react";
@@ -467,8 +471,8 @@ export default PublicRoute;
 ```
 
 Il ne reste plus qu'à englober l'application dans le contexte d'authentification et utiliser react router pour définir les chemins des composants.
-Ici l'application ne reconnait que les routes "/" et "/private", les autres urls renverront vers le composants "404 - not fund"
-Le chemin "/" affiche la page publique et le chemin "/" private nécessite d'être "log" pour être affichées
+Ici l'application ne reconnait que les routes "/" et "/private", les autres urls renverront vers le composants "404 - not found"
+Le chemin "/" affiche la page publique et le chemin "/" private nécessite d'être "log" pour être affiché
 
 ```tsx
 import { BrowserRouter, Route, Routes } from "react-router-dom";
@@ -510,10 +514,7 @@ export default App;
 Exemple d'un formulaire basique de login via la bibliothèque React-Hook-Form.
 Définition des fonctions de gestion du formulaire via useForm (register, handleSubmit, reset, error ...)
 
-"register" permet de d'enregistrer les hcamp dans le système de gestion des formulaire de la bibliothèque
-"handleSubmit" permet de gérer la soumission du formulaire
-"reset" permet de remettre à zéro les champs
-et l'objet "error" contient les erreurs pour chaque champs.
+"register" permet d'enregistrer les champs dans le système de gestion des formulaires de la bibliothèque, "handleSubmit" permet de gérer la soumission du formulaire, "reset" permet de remettre à zéro les champs et l'objet "error" contient les erreurs pour chaque champ.
 
 Possibilité de passer un objet aux inputs qui contient une certaine validation mais on préférera passer par une bibliothèque comme Yup qui permettra de définir un schéma.
 
@@ -634,9 +635,10 @@ export const SimpleComponent = () => {
 ### Requête HTTP avec Axios
 
 Exemple de code pour un get avec Axios.
-La données vient d'un endpoint publique contenant des données inutiles.
-On passe donc par une définition d'un type reprennant les champs renvoyer par l'API, en suite sur base de celle-ci on crée un type reprenant les données que l'on veut (ici via Pick)
-On fait appel à la fonction d'appel à l'API dans le useEffect comme àa celle ci est appelé au premier rendu du composant et comme on passe un tableau vide, uniquement au premier rendu.
+
+Dans cet exemple, les données viennent d'un endpoint publique contenant des données inutiles.
+On passe donc par une définition d'un type reprenant les champs renvoyés par l'API, ensuite, sur base de celle-ci on crée un type reprenant les données que l'on veut (ici via Pick). 
+On fait appel à la fonction d'appel à l'API dans le useEffect comme ça celle-ci est appelée au premier rendu du composant et comme on passe un tableau vide, uniquement au premier rendu.
 
 ```tsx
 import axios from "axios";
@@ -710,7 +712,7 @@ export const AxiosComponent = () => {
 
 ### Redux
 
-Example de code: Application affichant des "Cat fact" qui viennent d'une API.
+Exemple de code: Application affichant des "Cat fact" qui viennent d'une API.
 
 Création du store dans l'application. Avec redux, celui-ci doit être unique et ne sera fait qu'**une seule fois**. il sera cependant modifié pour rajouter les nouveaux reducer.
 
@@ -739,7 +741,7 @@ export default store;
 Création des actions et du reducer
 
 Définition des actions pour catFact.
-Ici on ne définit qu'une action, "getCatFact", celle-ci définit une intention de changer l'état et ce qu'il doit se passer. Dans ce cas  ci, un appel à une API pour récupérer un CatFact.
+Ici on ne définit qu'une action, "getCatFact", celle-ci définit une intention de changer l'état et ce qu'il doit se passer. Dans ce cas-ci, un appel à une API pour récupérer un CatFact.
 Ici on ne modifie pas directement l'état, c'est simplement un "message" envoyé au store.
 On fait donc appel ici à notre "service" qui lui se charge de faire l'appel à l'API via Axios.
 
@@ -761,11 +763,9 @@ export const getCatFact = createAsyncThunk("catFact/getCatFact", async () => {
 });
 ```
 
-Le reducer est une fonction qui prend deux arguement, le state et l'action, il décrit comme l'état de l'application doit changer en réponse à une action.
-Ici 3 scénario possible, l'action getCatFact étant une requête HTTP vers une API via Axios est une Promesse, elle possède donc doit état dde réponse possible "pending", "fulfilled" et "rejected", on gère donc ici les 3 scénario.
-Dans le cas du pending, on met à jour le state sur isLoading.
-Dans le cas du fulfilled, on push le catFact dans le state et on enlève le isLoading.
-Dans le cas du reject, on est en erreur enlève donc le isLoading et on set l'erreur.
+Le reducer est une fonction qui prend deux arguments : le state et l'action. Il décrit comment l'état de l'application doit changer en réponse à une action. 
+Ici 3 scénarios possibles, l'action getCatFact étant une requête HTTP vers une API via Axios est une Promesse, elle possède donc 3 états de réponses possibles "pending", "fulfilled" et "rejected", on gère donc ici les 3 scénarios. 
+Dans le cas du pending, on met à jour le state sur isLoading. Dans le cas du fulfilled, on push le catFact dans le state et on enlève le isLoading. Dans le cas du reject, on est en erreur, on enlève donc le isLoading et on set l'erreur.
 
 ```tsx
 //Fichier catFact.reducer.ts
@@ -825,7 +825,7 @@ export const requestNewCatFact = async () => {
 };
 ```
 
-On englobe ensuite l'application dans le store afin quce celui-ci soit disponible partout.
+On englobe ensuite l'application dans le store afin que celui-ci soit disponible partout.
 
 ```tsx
 //Fichier main.tsx
@@ -845,11 +845,11 @@ createRoot(document.getElementById("root")!).render(
 );
 ```
 
-Utilisation de redux dans un composant afin de récupérer et d'affichers des catfacts.
+Utilisation de redux dans un composant afin de récupérer et d'afficher* des catfacts.
 Dans cet exemple, division en 3 composants : 
- - CatFactComponent: composant principale qui fait appel au dispatch et au store. C'est ce composants qui contient la listes des catFact ainsi que le button qui fait les appels à l'API pour récupérer des catfacts.
- - CatFactComponentList : Composant qui affiches CatFactComponentItem. Son parent lui a passer la liste des Catfacts. Il les passera ensuite un part un à son enfant CatFactComponentListItem.
- - CatFactComponentListItem : Composant qui se charge uniquement d'afficher le catFact. Son parent CatFactComponentList lui à uniquement passer le Catfact qu'il doit afficher
+ - CatFactComponent: composant principal qui fait appel au dispatch et au store. C'est ce composant qui contient la liste des catFacts ainsi que le button qui fait les appels à l'API pour récupérer des catfacts.
+ - CatFactComponentList : Composant qui affiche CatFactComponentItem. Son parent lui a passé la liste des Catfacts. Il les passera ensuite un part un à son enfant CatFactComponentListItem.
+ - CatFactComponentListItem : Composant qui se charge uniquement d'afficher le catFact. Son parent CatFactComponentList lui a uniquement passé le Catfact qu'il doit afficher
    
 ```tsx
 //Fichier CatFactComponent.tsx
@@ -949,7 +949,7 @@ export const CatFactComponentListItem = ({
  - **Rechercher et remplacer dans le fichier** : `Ctrl + H`
  - **Ouvrir le terminal** : `Ctrl + Shift + ù`
  - **Rechercher dans le fichier** : `Ctrl + F`
- - **Mettre en commentaire la sélection : `Ctrl + :`
+ - **Mettre en commentaire la sélection** : `Ctrl + :`
  - **Aller à la définition** : `F12`
  - **Afficher des suggestions de code** : `Ctrl + espace`
  - **Indentation automatique** : `Ctrl + Shift + I`
