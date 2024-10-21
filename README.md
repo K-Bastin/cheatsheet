@@ -17,7 +17,10 @@
 ## React
 
 <!--  TODO Explication de vite (bundler qui compile) !-->
-### Créer un projet avec vite
+### Créer un projet avec Vite
+
+Vite est un bundler, il permet de compiler les fichiers Javascript, css, etc ...
+Vite à été conçu pour être très rapide, surtout pendant le développement.
 
 ````
  pnpm create vite@latest
@@ -27,32 +30,38 @@ Plusieurs questions vont être posées
   2. Choix de la bibliothèque / du framework
   3. Choix Javascript ou typescript (+ SWC)
 
-Ensuite se rendre dans le dossier ou l'installation à été faite
+Ensuite se rendre dans le dossier ou l'installation (cd nom du projet) à été faite et faire la commande
 
 ````
 pnpm install
 ````
 
 Cette commande permet de télécharger les dépendances spécifiées dans le packages.json (node_modules)
-Si un projet est récuépérer depuis un github, le node_module est dans le .gitignore et n'est pas récupérer, il est donc nécessaire de faire cette commande pour télécharger les dépendances.
+Si un projet est récupérer depuis un Github, le node_module est dans le .gitignore et n'est donc pas récupérer, il est donc nécessaire de faire cette commande pour télécharger les dépendances.
 
 ### Lancer un projet en local
 
 ````
 pnpm run dev
 ````
-Par défault, le projet sera héberger sur le "http://localhost:5173/"
+Cette commande est en réalité un script que vous pouvez retrouver dans votre package.json. 
+Par défault, le projet sera héberger sur le http://localhost:5173/
 
 ### Structure d'un projet
 ![Structure projet React](./structure.png)
+
+### Création et utilisation d'un composant simple
+//TODO
+
+### Affichage conditionnel
 
 ### Les Hooks
 
 #### useEffect
 
-Le useEffect est du code qui sera éxécuté soit, au premier rendu du composant, soit à chaque rendu soit à chaque modification de la variable passé en paramètre du useEffect.
+Le useEffect est du code qui sera éxécuté soit, au premier rendu du composant, soit à chaque rendu, soit à chaque modification de la variable passé en paramètre du useEffect.
 
-Dans ce cas-ci, l'affichage dans la console sera effectué uniquement au premier rendu du composant.
+Dans ce cas-ci, l'affichage dans la console sera effectué uniquement au premier rendu du composant car on lui a passé un tableau vide en paramètre.
 
 ```tsx
   useEffect(() => {
@@ -61,7 +70,7 @@ Dans ce cas-ci, l'affichage dans la console sera effectué uniquement au premier
   }, []);
 ```
 
-Dans ce cas-ci, l'affichage dans la console sera effectué à chaque rendu du composant.
+Dans ce cas-ci, l'affichage dans la console sera effectué à chaque rendu du composant car on ne lui a passé aucun paramètre.
 
 ```tsx
   useEffect(() => {
@@ -70,7 +79,7 @@ Dans ce cas-ci, l'affichage dans la console sera effectué à chaque rendu du co
   });
 ```
 
-Dans ce cas-ci, l'affichage dans la console sera effectué à chaque modification de la variable "Value".
+Dans ce cas-ci, l'affichage dans la console sera effectué à chaque modification de la variable "Value" qui est la variable qu'on lui a passé en paramètre.
 
 Attention au boucle infinie si du code dans ce useEffect met à jour la variable impliquée.
 
@@ -81,24 +90,53 @@ Attention au boucle infinie si du code dans ce useEffect met à jour la variable
   }, [value]);
 ```
 
+Dans le useEffect, il est possible de spécifié une fonction de "nettoyage" via le return. Ce qui permet de nettoyer des ressources comme des abonnements, des timers ou des événements.
+
+```
+useEffect(() => {
+  const interval = setInterval(() => {
+    console.log("Intervalle actif");
+  }, 1000);
+
+  // Le return ici nettoie l'intervalle lorsque le composant est démonté
+  return () => clearInterval(interval);
+}, []);
+```
+
 #### useState
 
 Le useState est un hook utilisé pour ajouter un état local aux composants.
 Il retourne une paire [valeur, fonctionDeMiseAJour]  
 
+Cet état doit toujours être modifié via sa fonction de miseAJour sinon React ne sait pas qu'il doit render le composant.
+
+Ici une état "value" est définit du type "number" et initialisé à 0;
+
 ```tsx
   const [value, setValue] = useState<number>(0);
 ```
 
-Il est important de noté que la fonction de mise à jour (setState) ne remplace par l'état immédiatement et que c'est une opération asynchrone. L'appel à au setState, planifie une mise à jour du composant et la valeur ne sera mise à jour qu'au rendu de celui ci.
+Il est important de noté que la fonction de mise à jour (setState) ne remplace par l'état immédiatement et que c'est une opération asynchrone. 
+L'appel à au setState, planifie une mise à jour du composant et la valeur ne sera mise à jour qu'au rendu de celui ci.
 
 Exemple ce code affichera 1 et non 2 car la valeur n'as pas encore été mise à jour.
 
 ```tsx
       const [value, setValue] = useState<number>(0);
 
+      setValue((prevValue) => prevValue + 1); 
       setValue((prevValue) => prevValue + 1);
-      setValue((prevValue) => prevValue + 1);
+      console.log(value);
+```
+
+Il est important de toujours travailler sur une copie de l'état afin de ne pas écraser des parties, le plus simple reste d'utilisé l'opérateur de décomposition "..." .
+
+```
+const [person, setPerson] = useState({ name: 'John', age: 30 });
+
+function updateName(newName) {
+  setPerson(prevPerson => ({ ...prevPerson, name: newName }));
+}
 ```
 
 #### useRef
@@ -163,12 +201,15 @@ function MyForm() {
 
 ### Le Typage
 
+Les types seront généralement stockés dans un fichier *.d.ts, le "d" étant pour définition.
+Le "?" dans le typage signifie que c'est une valeur qui n'est pas obligatoire.
+
 ```tsx
 type User = {
   id?: number;
   name: string;
   firstname: string;
-  adress: adress;
+  adress: Adress;
 };
 
 type Adress = {
@@ -177,9 +218,10 @@ type Adress = {
   houseNumber: number;
 };
 ```
-Le "?" dans le typage signifique c'est une valeur qui n'est pas obligatoire.
 
 ### Les Enumération
+
+Dans le cas du statut, cette syntaxe signifique que Closed vaudra 2 et que ReOpen vaudra 3 et ainsi de suite.
 
 ```tsx
 export enum Nat {
@@ -195,8 +237,6 @@ export enum Statut {
   ReOpen,
 }
 ```
-
-Dans le cas du statut, cette syntaxe signifique que Closed vaudra 2 et que ReOpen vaudra 3 et ainsi de suite.
 
 ### Passage de props 
 
@@ -269,7 +309,15 @@ export const ComposantEnfant = (user: ComposantEnfantProps) => {
 
 ### Formulaire avec React-Hook-Form
 
-Exemple d'un formulaire basique de login.
+Exemple d'un formulaire basique de login via la bibliothèque React-Hook-Form.
+Définition des fonctions de gestion du formulaire via useForm (register, handleSubmit, reset, error ...)
+
+"register" permet de d'enregistrer les hcamp dans le système de gestion des formulaire de la bibliothèque
+"handleSubmit" permet de gérer la soumission du formulaire
+"reset" permet de remettre à zéro les champs
+et l'objet "error" contient les erreurs pour chaque champs.
+
+Possibilité de passer un objet aux inputs qui contient une certaine validation mais on préférera passer par une bibliothèque comme Yup qui permettra de définir un schéma.
 
 ```tsx
 import { useForm } from "react-hook-form";
@@ -326,7 +374,7 @@ export const FormComponent = () => {
 
 ### Validation d'un formulaire React-Hook-Form avec Yup
 
-Afin de valider les données d'un formulaire, il est possible de passer par une bibliothèque comme Yup. Celle-ci permet d'établir un schéma avec les définitions des obligations des champs du formulaire.
+Afin de valider les données d'un formulaire, il est possible de passer par une bibliothèque comme Yup. Celle-ci permet d'établir un schéma avec les définitions des obligations des champs du formulaire ainsi que les messages d'erreurs liées à celles-ci.
 Exemple de code
 
 ```tsx
@@ -344,20 +392,16 @@ const validationSchema = Yup.object().shape({
   email: Yup.string()
     .email("L'adresse email n'est pas valide")
     .required("L'adresse email est requise."),
-  password: Yup.string().required("Le mot de passe."),
+  password: Yup.string().required("Le mot de passe est requis."),
 });
 
-export const FormComponent = () => {
+export const SimpleComponent = () => {
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors },
   } = useForm<LoginProps>({
-    defaultValues: {
-      email: "",
-      password: "",
-    },
     resolver: yupResolver(validationSchema),
   });
 
@@ -372,16 +416,13 @@ export const FormComponent = () => {
       <form onSubmit={handleSubmit(onSubmitLogin)}>
         <div>
           <label>Email : </label>
-          <input type="text" {...register("email", { required: true })} />
+          <input type="text" {...register("email")} />
           {errors.email && <p>{errors.email.message}</p>}
         </div>
         <div>
           <label>Password : </label>
-          <input
-            type="password"
-            {...register("password", { min: 1, required: true })}
-          />
-          {errors.email && <p>Veuillez indiquez un mot de passe.</p>}
+          <input type="password" {...register("password")} />
+          {errors.password && <p>{errors.password.message}</p>}
         </div>
 
         <div>
@@ -391,11 +432,13 @@ export const FormComponent = () => {
     </>
   );
 };
-
 ```
 ### Requête HTTP avec Axios
 
 Exemple de code pour un get avec Axios.
+La données vient d'un endpoint publique contenant des données inutiles.
+On passe donc par une définition d'un type reprennant les champs renvoyer par l'API, en suite sur base de celle-ci on crée un type reprenant les données que l'on veut (ici via Pick)
+On fait appel à la fonction d'appel à l'API dans le useEffect comme àa celle ci est appelé au premier rendu du composant et comme on passe un tableau vide, uniquement au premier rendu.
 
 ```tsx
 import axios from "axios";
@@ -470,7 +513,8 @@ export const AxiosComponent = () => {
 ### Redux
 
 Example de code: Application affichant des "Cat fact" qui viennent d'une API.
-Création du store dans l'application. Avec redux, celui-ci doit être unique et ne sera fait qu'une seule fois. il sera cependant modifié pour rajouter les nouveaux reducer.
+
+Création du store dans l'application. Avec redux, celui-ci doit être unique et ne sera fait qu'**une seule fois**. il sera cependant modifié pour rajouter les nouveaux reducer.
 
 ```tsx
 //Fichier store.ts
@@ -496,6 +540,11 @@ export default store;
 
 Création des actions et du reducer
 
+Définition des actions pour catFact.
+Ici on ne définit qu'une action, "getCatFact", celle-ci définit une intention de changer l'état et ce qu'il doit se passer. Dans ce cas  ci, un appel à une API pour récupérer un CatFact.
+Ici on ne modifie pas directement l'état, c'est simplement un "message" envoyé au store.
+On fait donc appel ici à notre "service" qui lui se charge de faire l'appel à l'API via Axios.
+
 ```tsx
 //Fichier catFact.action.ts
 import { createAsyncThunk } from "@reduxjs/toolkit";
@@ -513,6 +562,12 @@ export const getCatFact = createAsyncThunk("catFact/getCatFact", async () => {
   return data;
 });
 ```
+
+Le reducer est une fonction qui prend deux arguement, le state et l'action, il décrit comme l'état de l'application doit changer en réponse à une action.
+Ici 3 scénario possible, l'action getCatFact étant une requête HTTP vers une API via Axios est une Promesse, elle possède donc doit état dde réponse possible "pending", "fulfilled" et "rejected", on gère donc ici les 3 scénario.
+Dans le cas du pending, on met à jour le state sur isLoading.
+Dans le cas du fulfilled, on push le catFact dans le state et on enlève le isLoading.
+Dans le cas du reject, on est en erreur enlève donc le isLoading et on set l'erreur.
 
 ```tsx
 //Fichier catFact.reducer.ts
@@ -572,7 +627,7 @@ export const requestNewCatFact = async () => {
 };
 ```
 
-Englober l'application dans le store afin quce celui-ci soit disponible partout.
+On englobe ensuite l'application dans le store afin quce celui-ci soit disponible partout.
 
 ```tsx
 //Fichier main.tsx
@@ -669,25 +724,24 @@ export const CatFactComponentListItem = ({
 ```
 
 ### Extension utile VSCode 
-- Better comments
-- CodeSnap
-- Color Highlight
-- Auto Rename Tag
-- Error Lens
-- ES7 + React/Redux/React-native snippets
-- ESLint
-- gitignore
-- GitLens
-- indent-rainbow
-- Javascript (ES6) code snippets
-- Path intellisense
-- Prettier
-- Prettier ESLint
-- Pretty TypeScript errors
-- SVG
-- Tailwind CSS IntelliSense
-- Thunder Client
-- VSCode React Refactor
+- [Better comments](https://marketplace.visualstudio.com/items?itemName=aaron-bond.better-comments)
+- [CodeSnap](https://marketplace.visualstudio.com/items?itemName=adpyke.codesnap)
+- [Color Highlight](https://marketplace.visualstudio.com/items?itemName=naumovs.color-highlight)
+- [Auto Rename Tag](https://marketplace.visualstudio.com/items?itemName=formulahendry.auto-rename-tag)
+- [Error Lens](https://marketplace.visualstudio.com/items?itemName=usernamehw.errorlens) 
+- [ES7 + React/Redux/React-native snippets](https://marketplace.visualstudio.com/items?itemName=dsznajder.es7-react-js-snippets)
+- [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint)
+- [Gitignore](https://marketplace.visualstudio.com/items?itemName=codezombiech.gitignore)
+- [GitLens](https://marketplace.visualstudio.com/items?itemName=eamodio.gitlens)
+- [indent-rainbow](https://marketplace.visualstudio.com/items?itemName=oderwat.indent-rainbow)
+- [Javascript (ES6) code snippets](https://marketplace.visualstudio.com/items?itemName=xabikos.JavaScriptSnippets)
+- [Path intellisense](https://marketplace.visualstudio.com/items?itemName=christian-kohler.path-intellisense)
+- [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode)
+- [Pretty TypeScript errors](https://marketplace.visualstudio.com/items?itemName=yoavbls.pretty-ts-errors)
+- [SVG](https://marketplace.visualstudio.com/items?itemName=jock.svg)
+- [Tailwind CSS IntelliSense](https://marketplace.visualstudio.com/items?itemName=bradlc.vscode-tailwindcss)
+- [Postman](https://marketplace.visualstudio.com/items?itemName=Postman.postman-for-vscode)
+- [VSCode React Refactor](https://marketplace.visualstudio.com/items?itemName=planbcoding.vscode-react-refactor)
   
 ### Raccourcis utile VSCode
 
