@@ -8,6 +8,8 @@
 | pnpm | Vitesse <br> Espace disque réduit <br> Intégration facile avec npm <br> isolation des dépendances | Moins répandu <br> Compatibilité | 
 | Yarn | Vitesse <br> Fiabilité <br> Installation parallèle <br> Plug'n'Play | Poids des installations <br> Différence avec npm <br> Mise à jour moins fréquentes| 
 
+**Les commandes npm, pnpm et yarn doivent être éxécutée dans un terminal de commande ou directement dans le terminal de Visual code**
+
 ### Installer/Activer pnpm
 
 ````
@@ -29,14 +31,14 @@ Plusieurs questions vont être posées
   2. Choix de la bibliothèque / du framework
   3. Choix Javascript ou typescript (+ SWC)
 
-Ensuite se rendre dans le dossier ou l'installation (cd nom du projet) à été faite et faire la commande
+Ensuite se rendre dans le dossier où l'installation (via cd "nom du projet") a été faite et faire la commande
 
 ````
 pnpm install
 ````
 
 Cette commande permet de télécharger les dépendances spécifiées dans le packages.json (node_modules)
-Si un projet est récupérer depuis un Github, le node_module est dans le .gitignore et n'est donc pas récupérer, il est donc nécessaire de faire cette commande pour télécharger les dépendances.
+Si un projet est récupéré depuis un repository (ex. Github), le node_module est dans le .gitignore et n'est donc pas récupéré, il est donc nécessaire de faire cette commande pour télécharger les dépendances.
 
 ### Lancer un projet en local
 
@@ -44,12 +46,13 @@ Si un projet est récupérer depuis un Github, le node_module est dans le .gitig
 pnpm run dev
 ````
 Cette commande est en réalité un script que vous pouvez retrouver dans votre package.json. 
-Par défault, le projet sera héberger sur le http://localhost:5173/
+Par défaut, le projet sera hébergé sur le http://localhost:5173/
 
 ### Structure d'un projet
 
 Voici une idée globale de la structure d'un projet. 
-Les dossiers dépendront de la façon dont l'équipe veut structurer les projets mais ce screenshot montre l'idée générale. Il pourra il avoir d'autre dossier comme pour le store, le routing, les middlewares et autres.
+Les dossiers dépendront de la façon dont l'équipe veut structurer les projets mais ce screenshot montre l'idée générale. 
+Il pourra il avoir d'autres dossiers comme pour le store, le routing, les middlewares et autres.
 
 ![Structure projet React](./structure.png)
 
